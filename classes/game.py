@@ -85,6 +85,19 @@ class Person:
             print("    " + str(i) + ".", item.name, ":", item.description + ". x" + str(item.amount))
             i += 1
 
+    def choose_target(self, enemies):
+        i = 1
+
+        print("\n" + bcolors.FAIL + bcolors.BOLD + "    TARGET:" + bcolors.ENDC)
+
+        for enemy in enemies:
+            print ("        " + str(i) + ".", enemy.name)
+            i +=1
+
+        choice = int(input("    Choose target:")) - 1
+        return choice
+
+
     def get_enemy_stats(self):
         hp_bar = ""
         bar_ticks = (self.hp / self.maxhp) * 100 / 2
@@ -171,6 +184,34 @@ class Person:
         # print(str(self.hp), "/", str(self.maxhp), "   |" + bcolors.OKGREEN +
         #       hp_bar + bcolors.ENDC +
         #       "|    " + str(self.mp), "/", str(self.maxmp), "   |" + bcolors.OKBLUE + mp_bar + bcolors.ENDC + "|")
+
+
+    def choose_enemy_spell(self):
+        magic_choice = random.randrange(0, len(self.magic))
+        spell = self.magic[magic_choice]
+        magic_dmg = spell.generate_spell_damage()
+
+        if self.mp < spell.cost:
+            # if spell.type == ""
+            self.choose_enemy_spell()
+        if spell.type == "White Magic":
+            print("they picked white magic")
+            print("their hp is", self.hp, "and max hp is", self.maxhp)
+            if self.hp > (self.maxhp * 0.5):
+                print("their hp is too damn high")
+                self.choose_enemy_spell()
+        print("this should be black magic now")
+        return spell, magic_dmg
+
+        # if self.hp < (self.maxhp * 0.5):
+        #     if spell.type == "Black Magic":
+        #         self.choose_enemy_spell()
+        # else:
+        #     return spell, magic_dmg
+
+
+
+
 
 
 
