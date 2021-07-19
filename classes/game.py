@@ -1,5 +1,6 @@
 import random
-from .magic import Spell
+from classes.magic import Spell
+
 
 
 class bcolors:
@@ -180,42 +181,26 @@ class Person:
               hp_bar + bcolors.ENDC +
               "|   " + current_mp + "   |" + bcolors.OKBLUE + mp_bar + bcolors.ENDC + "|")
 
-        # print(self.name)
-        # print(str(self.hp), "/", str(self.maxhp), "   |" + bcolors.OKGREEN +
-        #       hp_bar + bcolors.ENDC +
-        #       "|    " + str(self.mp), "/", str(self.maxmp), "   |" + bcolors.OKBLUE + mp_bar + bcolors.ENDC + "|")
-
 
     def choose_enemy_spell(self):
+
         magic_choice = random.randrange(0, len(self.magic))
         spell = self.magic[magic_choice]
         magic_dmg = spell.generate_spell_damage()
+        print("The chosen spell type is", spell.type, ". The chosen spell name is", spell.name, ". The spell cost for it is", spell.cost)
 
-        if self.mp < spell.cost:
-            # if spell.type == ""
-            self.choose_enemy_spell()
-        if spell.type == "White Magic":
-            print("they picked white magic")
-            print("their hp is", self.hp, "and max hp is", self.maxhp)
-            if self.hp > (self.maxhp * 0.5):
-                print("their hp is too damn high")
-                self.choose_enemy_spell()
-        print("this should be black magic now")
-        return spell, magic_dmg
-
-        # if self.hp < (self.maxhp * 0.5):
-        #     if spell.type == "Black Magic":
-        #         self.choose_enemy_spell()
-        # else:
-        #     return spell, magic_dmg
-
-
-
-
-
-
-
-
-
-
+        if self.mp > spell.cost:
+            print("we have enough MPs")
+            if spell.type == "White Magic" and self.hp < (self.maxhp * 0.5):
+                print("the magic picked satisfied all conditions")
+                return spell, magic_dmg
+            elif spell.type == "Black Magic" and self.hp >= (self.maxhp * 0.5):
+                print("this also satisfies the conditions")
+                return spell, magic_dmg
+            else:
+                print("we have to try again")
+                return self.choose_enemy_spell()
+        else:
+            print("we have to try again")
+            return self.choose_enemy_spell()
 
